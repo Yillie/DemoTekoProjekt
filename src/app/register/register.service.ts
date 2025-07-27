@@ -1,7 +1,7 @@
 // filepath: e:\TEKO\Semester 6\WebFrontend\DemoTekoProjekt\src\app\register\register-backend.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface RegisterData {
   username: string;
@@ -15,7 +15,7 @@ export interface RegisterData {
 @Injectable({
   providedIn: 'root',
 })
-export class RegisterBackendService {
+export class RegisterService {
   private apiUrl =
     'https://kek-c8c6evhbfpgseka5.westeurope-01.azurewebsites.net/api/Auth/register';
 
