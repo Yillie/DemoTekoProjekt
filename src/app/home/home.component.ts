@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import {
@@ -8,6 +8,7 @@ import {
   InteractionStatus,
 } from '@azure/msal-browser';
 import { filter } from 'rxjs/operators';
+import { RegisterService } from '../register/register.service';
 
 @Component({
   selector: 'app-home',
@@ -17,10 +18,12 @@ import { filter } from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit {
   loginDisplay = false;
+  registeredUsername: string | null = null;
 
   constructor(
     private authService: MsalService,
-    private msalBroadcastService: MsalBroadcastService
+    private msalBroadcastService: MsalBroadcastService,
+    public service: RegisterService
   ) {}
 
   ngOnInit(): void {

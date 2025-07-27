@@ -10,7 +10,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { RegisterBackendService } from './register.service';
+import { RegisterService } from './register.service';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +25,7 @@ import { RegisterBackendService } from './register.service';
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
-  providers: [RegisterBackendService],
+  providers: [RegisterService],
 })
 export class RegisterComponent {
   registerForm: FormGroup;
@@ -32,8 +33,9 @@ export class RegisterComponent {
   registrationError = '';
 
   constructor(
-    private registerService: RegisterBackendService,
-    private fb: FormBuilder
+    private registerService: RegisterService,
+    private fb: FormBuilder,
+    private router: Router
   ) {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
@@ -51,6 +53,7 @@ export class RegisterComponent {
           this.registrationSuccess = true;
           this.registrationError = '';
           this.registerForm.reset();
+          this.router.navigate(['/']);
         },
         error: (err) => {
           this.registrationSuccess = false;
