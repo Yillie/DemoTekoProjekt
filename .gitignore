@@ -40,3 +40,15 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+test.http
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/DemoTekoProjekt/CopilotIndices/17.14.878.3237/CodeChunks.db
+.vs/DemoTekoProjekt/CopilotIndices/17.14.878.3237/SemanticSymbols.db
+.vs/DemoTekoProjekt/FileContentIndex/4d55ce7b-34b2-4374-a29d-cfa1b002bfe2.vsidx
+.vs/DemoTekoProjekt/FileContentIndex/28e31c5f-14e3-4c0e-933c-0aaf255d510b.vsidx
+.vs/DemoTekoProjekt/FileContentIndex/28732fc8-6876-499c-92c3-570901376fc8.vsidx
+.vs/DemoTekoProjekt/FileContentIndex/aa86cd1a-8454-478a-8199-198dc084982e.vsidx
+.vs/DemoTekoProjekt/FileContentIndex/d45e469c-9977-4a86-b4aa-68e3316f05bc.vsidx
+.vs/DemoTekoProjekt/v17/.wsuo
+.vs/DemoTekoProjekt/v17/DocumentLayout.json
