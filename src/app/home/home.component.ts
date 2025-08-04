@@ -1,29 +1,45 @@
-import { Component, effect, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
+import {
+  MsalService,
+  MsalBroadcastService,
+  MSAL_GUARD_CONFIG,
+  MsalGuardConfiguration,
+} from '@azure/msal-angular';
 import {
   AuthenticationResult,
+  InteractionStatus,
+  PopupRequest,
+  RedirectRequest,
   EventMessage,
   EventType,
-  InteractionStatus,
 } from '@azure/msal-browser';
 import { filter } from 'rxjs/operators';
-import { RegisterService } from '../register/register.service';
+import { RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: [],
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatToolbarModule,
+    MatButtonModule,
+    MatMenuModule,
+  ],
 })
 export class HomeComponent implements OnInit {
   loginDisplay = false;
   registeredUsername: string | null = null;
 
   constructor(
+    @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private authService: MsalService,
-    private msalBroadcastService: MsalBroadcastService,
-    public service: RegisterService
+    private msalBroadcastService: MsalBroadcastService
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +60,42 @@ export class HomeComponent implements OnInit {
       .subscribe(() => {
         this.setLoginDisplay();
       });
+  }
+
+  loginRedirect() {
+    if (this.msalGuardConfig.authRequest) {
+      this.authService.loginRedirect({
+        ...this.msalGuardConfig.authRequest,
+      } as RedirectRequest);
+    } else {
+      this.authService.loginRedirect();
+    }
+  }
+
+  loginPopup() {
+    if (this.msalGuardConfig.authRequest) {
+      this.authService
+        .loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
+        .subscribe((response: AuthenticationResult) => {
+          this.authService.instance.setActiveAccount(response.account);
+        });
+    } else {
+      this.authService
+        .loginPopup()
+        .subscribe((response: AuthenticationResult) => {
+          this.authService.instance.setActiveAccount(response.account);
+        });
+    }
+  }
+
+  logout(popup?: boolean) {
+    if (popup) {
+      this.authService.logoutPopup({
+        mainWindowRedirectUri: '/',
+      });
+    } else {
+      this.authService.logoutRedirect();
+    }
   }
 
   setLoginDisplay() {

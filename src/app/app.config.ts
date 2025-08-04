@@ -12,7 +12,11 @@ import {
   HTTP_INTERCEPTORS,
   withFetch,
 } from '@angular/common/http';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import {
+  BrowserAnimationsModule,
+  provideAnimations,
+  provideNoopAnimations,
+} from '@angular/platform-browser/animations';
 import {
   IPublicClientApplication,
   PublicClientApplication,
@@ -116,6 +120,7 @@ export const appConfig: ApplicationConfig = {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory,
     },
+    provideAnimations(),
     MsalService,
     MsalGuard,
     MsalBroadcastService,

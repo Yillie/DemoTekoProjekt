@@ -11,17 +11,22 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RegisterService } from './register.service';
-import { Route, Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
+    CommonModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
+    RouterLink,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
@@ -31,6 +36,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
   registrationSuccess = false;
   registrationError = '';
+  loading = false;
 
   constructor(
     private registerService: RegisterService,
@@ -48,11 +54,13 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
+      this.loading = true;
       this.registerService.register(this.registerForm.value).subscribe({
         next: (response) => {
           this.registrationSuccess = true;
           this.registrationError = '';
           this.registerForm.reset();
+          this.loading = false;
           this.router.navigate(['/']);
         },
         error: (err) => {

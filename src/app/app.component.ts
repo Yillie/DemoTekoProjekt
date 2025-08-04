@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import {
   MsalService,
   MsalModule,
@@ -12,10 +12,7 @@ import {
   MsalGuardConfiguration,
 } from '@azure/msal-angular';
 import {
-  AuthenticationResult,
   InteractionStatus,
-  PopupRequest,
-  RedirectRequest,
   EventMessage,
   EventType,
 } from '@azure/msal-browser';
@@ -23,24 +20,24 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    imports: [
-        CommonModule,
-        MsalModule,
-        RouterOutlet,
-        RouterLink,
-        MatToolbarModule,
-        MatButtonModule,
-        MatMenuModule,
-    ]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  imports: [
+    CommonModule,
+    MsalModule,
+    RouterOutlet,
+    MatToolbarModule,
+    MatButtonModule,
+    MatMenuModule,
+  ],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Angular Standalone Sample - MSAL Angular';
   isIframe = false;
   loginDisplay = false;
   private readonly _destroying$ = new Subject<void>();
+  showRegister = false;
 
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
@@ -50,7 +47,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authService.handleRedirectObservable().subscribe();
-    
+
     this.isIframe = window !== window.parent && !window.opener; // Remove this line to use Angular Universal
 
     this.authService.instance.enableAccountStorageEvents(); // Optional - This will enable ACCOUNT_ADDED and ACCOUNT_REMOVED events emitted when a user logs in or out of another tab or window
@@ -101,42 +98,6 @@ export class AppComponent implements OnInit, OnDestroy {
     ) {
       let accounts = this.authService.instance.getAllAccounts();
       this.authService.instance.setActiveAccount(accounts[0]);
-    }
-  }
-
-  loginRedirect() {
-    if (this.msalGuardConfig.authRequest) {
-      this.authService.loginRedirect({
-        ...this.msalGuardConfig.authRequest,
-      } as RedirectRequest);
-    } else {
-      this.authService.loginRedirect();
-    }
-  }
-
-  loginPopup() {
-    if (this.msalGuardConfig.authRequest) {
-      this.authService
-        .loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
-        .subscribe((response: AuthenticationResult) => {
-          this.authService.instance.setActiveAccount(response.account);
-        });
-    } else {
-      this.authService
-        .loginPopup()
-        .subscribe((response: AuthenticationResult) => {
-          this.authService.instance.setActiveAccount(response.account);
-        });
-    }
-  }
-
-  logout(popup?: boolean) {
-    if (popup) {
-      this.authService.logoutPopup({
-        mainWindowRedirectUri: '/',
-      });
-    } else {
-      this.authService.logoutRedirect();
     }
   }
 
