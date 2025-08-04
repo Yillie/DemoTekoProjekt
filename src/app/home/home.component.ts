@@ -19,6 +19,7 @@ import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { ProfileComponent } from '../profile/profile.component';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +31,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatToolbarModule,
     MatButtonModule,
     MatMenuModule,
+    ProfileComponent,
   ],
 })
 export class HomeComponent implements OnInit {
